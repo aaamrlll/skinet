@@ -1,3 +1,5 @@
+using API.Helpers;
+using AutoMapper;
 using Core.Interfaces;
 using Infrastructure.Data;
 using Microsoft.AspNetCore.Builder;
@@ -22,7 +24,8 @@ namespace API {
         public void ConfigureServices (IServiceCollection services) {
             services.AddControllers ();
             services.AddDbContext<StoreContext> (x => x.UseSqlServer (_configuration.GetConnectionString ("ConnectionString")));
-            services.AddScoped<IProductRepo, ProductRepo>();
+            services.AddAutoMapper(typeof(MappingProfiles));
+            services.AddScoped(typeof(IGenericRepo<>), typeof(GenericRepo<>));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -34,6 +37,8 @@ namespace API {
             app.UseHttpsRedirection ();
 
             app.UseRouting ();
+
+            app.UseStaticFiles();
 
             app.UseAuthorization ();
 
