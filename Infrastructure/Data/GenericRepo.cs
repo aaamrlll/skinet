@@ -16,6 +16,8 @@ namespace Infrastructure.Data
             _context = context;
 
         }
+
+        
         public async Task<IReadOnlyList<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
@@ -38,6 +40,10 @@ namespace Infrastructure.Data
         private IQueryable<T> ApplySpecification(ISpecification<T> spec)
         {
              return SpecificationEvaluator<T>.GetQuery(_context.Set<T>().AsQueryable(),spec);
+        }
+        public async Task<int> ContAsync(ISpecification<T> spec)
+        {
+            return await ApplySpecification(spec).CountAsync();
         }
     }
 }
